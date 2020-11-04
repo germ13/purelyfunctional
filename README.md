@@ -102,6 +102,8 @@ Submitted on 2020-10-28
 
 [Link](https://gist.github.com/ericnormand/c2c94f698bf3ace64c5f722da6dec2fc)
 
+## Description
+
 **Sums of pairs**
 
 Write a function that takes a collection of numbers and a target number. Return all pairs of numbers found in the collection that sum up to the target number.
@@ -136,4 +138,47 @@ Submitted 2020-10-26
         :when (and (< (first x) (first y)) 
                    (= (+ (second x) (second y)) target))] 
    (vec (sort [(second x) (second y)]))))
+```
+## 402 Most Frequent
+[Link](https://gist.github.com/ericnormand/7944c8806ba447a7bee6301a168ecdcb)
+
+## Description
+
+
+**Most frequent element**
+
+Write a function that takes a collection and returns the most frequent element. But here's the thing: you can't use the built-in function `clojure.core/frequencies`. And if there are ties, just pick one.
+
+Examples
+
+```clojure
+(most-frequent [2 2 3 4 4 2 1 1 3 2]) ;=> 2
+(most-frequent []) ;=> nil
+(most-frequent [1 1 4 4 5]) ;=> 4
+```
+
+Notes
+
+* return `nil` for an empty collection
+* in the case of a tie, return one of the winners
+
+Thanks to [this site](https://edabit.com/challenge/hxHBsYebaBM3ff5s6) for the challenge idea where it is considered Very Hard level in JavaScript.
+
+Please submit your solutions as comments on this gist.
+
+## My Solution
+Submitted 2020-11-03
+
+```clojure
+(defn most-frequent [elements]
+  (if (= [] elements) nil
+    (loop [el elements
+           rsum (apply merge (map #(hash-map (keyword (str %)) 0) (set elements)))]
+      (if (empty? el)
+        (symbol (key (apply max-key val rsum)))
+
+        (recur (rest el)
+               (update-in rsum
+                          [(keyword (str (first el)))]
+                          inc))))))
 ```
